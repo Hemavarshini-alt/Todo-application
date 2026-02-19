@@ -2,27 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>To-Do List</title>
+    <title>TODOLIST</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <div class="todo-container">
-    <h2>To-Do List</h2>
+    <div class="header">
+        <div>
+            <h2>My Tasks</h2>
+            <p class="tagline">Stay organized, stay productive</p>
+        </div>
+        <button id="theme-toggle">🌙</button>
+    </div>
 
     <div class="input-area">
-        <input type="text" id="taskInput" placeholder="Enter a task...">
-        <button onclick="addTask()">Add</button>
+        <input type="text" id="inp" placeholder="Enter a task...">
+        <button id="add-btn">Add</button>
     </div>
 
+    <!-- Stats -->
     <div class="stats">
-        Total: <span id="total">0</span> |
-        Completed: <span id="completed">0</span>
+        <p>Total: <span id="total">0</span></p>
+        <p>Completed: <span id="completed">0</span></p>
     </div>
 
-    <div id="message" class="message"></div>
-
-    <ul id="taskList"></ul>
+    <ul id="tasklist"></ul>
 </div>
 
 <script src="script.js"></script>

@@ -1,44 +1,53 @@
-// load the package
-const express=require("express");
-const mongoose=require("mongoose");
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
 
-const todo=require("./model/todo");
-const cors =require ("cors");
+const Todo = require("./model/Todo");
+
+const app = express();
+
+app.use(express.json());
 app.use(cors());
 
-//create the application object
-const app=express();   
-app.use(express.json());
-                        //both the steps used to create the server
+// MongoDB connection
+mongoose
+  .connect("mongodb://127.0.0.1:27017/todolistDB")
+  .then(() => console.log("MongoDB Connected successfully!"))
+  .catch((err) => console.log(err));
 
-mongoose.connect("mongodb://localhost:27017/todoDB")
-       .then(()=>{console.log(" connected to database")})
-       .catch((err)=>{console.log(err)});
-
-//CRUD operation
- app.get("/todolist",async(req,res)=>{
-       const todoget=await todo.find();
-       res.json(todoget);
- });
-
-app.post("/todolist",async (req,res)=>{
-       const todopost=await new todo({text:req.body.text}).save();
-
+// GET all tasks
+app.get("/todolist", async (req, res) => {
+  const todos = await Todo.find();
+  res.json(todos);
 });
 
-app.put("/todolist/:id",async(req,res)=>{
-       const todoput=await todo.findByIdAndUpdate(req.params.id,
-                         {completed:req.body.completed , updatedAt:req.body.updatedAt},
-                         {new:true},
-       );
-       res.json(todoput);
+// POST new task
+app.post("/todolist", async (req, res) => {
+  const newTodo = new Todo({
+    userTask: req.body.userTask,
+  });
+
+  await newTodo.save();
+  res.json(newTodo);
 });
 
-app.delete("/todolist/:id",async(req,res)=>{
-       await todo.findByIdAndDelete(req.params.id);
-       res.json({message:"task deleted"});
+// PUT update task status
+app.put("/todolist/:id", async (req, res) => {
+  const updated = await Todo.findByIdAndUpdate(
+    req.params.id,
+    { status: req.body.status },
+    { new: true }
+  );
+  res.json(updated);
 });
 
+// DELETE task
+app.delete("/todolist/:id", async (req, res) => {
+  await Todo.findByIdAndDelete(req.params.id);
+  res.json({ message: "Deleted" });
+});
 
-//start the server
-app.listen(3000,()=>{console.log("server started")});
+// start server
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
