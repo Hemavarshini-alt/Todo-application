@@ -6,7 +6,7 @@ const totalSpan = document.getElementById("total");
 const completedSpan = document.getElementById("completed");
 const themeToggle = document.getElementById("theme-toggle");
 
-const API_URL = "http://localhost:3000/todolist";
+const API_URL = "https://todo-application-2zba.onrender.com/todolist";
 
 // function to update stats
 function updateStats() {
