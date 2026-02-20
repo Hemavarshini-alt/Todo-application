@@ -11,9 +11,10 @@ app.use(cors());
 
 // MongoDB connection
 mongoose
-  .connect("mongodb://127.0.0.1:27017/todolistDB")
+  .connect("mongodb+srv://Hemavarshini:Hemavarshini@cluster0.m86owho.mongodb.net/tododb?appName=Cluster0")
   .then(() => console.log("MongoDB Connected successfully!"))
   .catch((err) => console.log(err));
+  //mongodb+srv://Hemavarshini:Hemavarshini@cluster0.m86owho.mongodb.net/tododb?appName=Cluster0
 
 // GET all tasks
 app.get("/todolist", async (req, res) => {
@@ -46,7 +47,7 @@ app.delete("/todolist/:id", async (req, res) => {
   await Todo.findByIdAndDelete(req.params.id);
   res.json({ message: "Deleted" });
 });
-
+const PORT =process.env.PORT || 3000;
 // start server
 app.listen(3000, () => {
   console.log("Server running on port 3000");
