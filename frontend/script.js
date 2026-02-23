@@ -6,7 +6,8 @@ const totalSpan = document.getElementById("total");
 const completedSpan = document.getElementById("completed");
 const themeToggle = document.getElementById("theme-toggle");
 
-const API_URL = "https://bookreader-whae.onrender.com";
+// ✅ Add /todolist endpoint
+const API_URL = "https://bookreader-whae.onrender.com/todolist";
 
 // function to update stats
 function updateStats() {
@@ -73,7 +74,7 @@ function create_task_list(task_id, task_text_db, task_status) {
   complete_btn.addEventListener("click", function () {
     let finished = task_text.classList.contains("completed");
 
-    fetch(API_URL + "/" + task_id, {
+    fetch(`${API_URL}/${task_id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: !finished }),
@@ -85,7 +86,7 @@ function create_task_list(task_id, task_text_db, task_status) {
 
   // delete task
   delete_btn.addEventListener("click", function () {
-    fetch(API_URL + "/" + task_id, {
+    fetch(`${API_URL}/${task_id}`, {
       method: "DELETE",
     }).then(() => {
       task_list.removeChild(list_item);
@@ -104,9 +105,5 @@ function create_task_list(task_id, task_text_db, task_status) {
 themeToggle.addEventListener("click", function () {
   document.body.classList.toggle("dark");
 
-  if (document.body.classList.contains("dark")) {
-    themeToggle.textContent = "☀";
-  } else {
-    themeToggle.textContent = "🌙";
-  }
+  themeToggle.textContent = document.body.classList.contains("dark") ? "☀" : "🌙";
 });
