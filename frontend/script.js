@@ -7,7 +7,7 @@ const completedSpan = document.getElementById("completed");
 const themeToggle = document.getElementById("theme-toggle");
 
 // ✅ Add /todolist endpoint
-const API_URL = "http://localhost:3000/todolist";
+const API_URL = "https://todo-application-backend-dvt7.onrender.com/todolist";
 
 // function to update stats
 function updateStats() {
