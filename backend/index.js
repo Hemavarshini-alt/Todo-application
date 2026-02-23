@@ -9,9 +9,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// MongoDB connection
+// MongoDB connection - mongodb+srv://Hemavarshini:Hemavarshini@cluster0.m86owho.mongodb.net/todolistDB?appName=Cluster0
 mongoose
-  .connect("mongodb://127.0.0.1:27017/todolistDB")
+  .connect("mongodb+srv://Hemavarshini:Hemavarshini@cluster0.m86owho.mongodb.net/todolistDB?appName=Cluster0")
   .then(() => console.log("MongoDB Connected successfully!"))
   .catch((err) => console.log(err));
   //mongodb+srv://Hemavarshini:Hemavarshini@cluster0.m86owho.mongodb.net/tododb?appName=Cluster0
@@ -49,6 +49,6 @@ app.delete("/todolist/:id", async (req, res) => {
 });
 const PORT =process.env.PORT || 3000;
 // start server
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log("Server running on port 3000");
 });
