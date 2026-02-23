@@ -7,7 +7,7 @@ const completedSpan = document.getElementById("completed");
 const themeToggle = document.getElementById("theme-toggle");
 
 // ✅ Add /todolist endpoint
-const API_URL = "https://bookreader-whae.onrender.com/todolist";
+const API_URL = "http://localhost:3000/todolist";
 
 // function to update stats
 function updateStats() {

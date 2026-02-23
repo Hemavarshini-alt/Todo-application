@@ -11,7 +11,7 @@ app.use(cors());
 
 // MongoDB connection
 mongoose
-  .connect("mongodb://127.0.0.1:27017/todolistD")
+  .connect("mongodb://127.0.0.1:27017/todolistDB")
   .then(() => console.log("MongoDB Connected successfully!"))
   .catch((err) => console.log(err));
   //mongodb+srv://Hemavarshini:Hemavarshini@cluster0.m86owho.mongodb.net/tododb?appName=Cluster0
