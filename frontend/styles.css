@@ -1,131 +1,146 @@
+/* Reset */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
 }
 
+/* Container */
 body {
-    height: 100vh;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background: #f7f7f7;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  padding: 50px 20px;
+  transition: all 0.3s ease;
 }
 
+body.dark {
+  background: #121212;
+  color: #e0e0e0;
+}
+
+/* Main Card */
 .container {
-    background: white;
-    padding: 25px;
-    width: 400px;
-    border-radius: 15px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-    text-align: center;
+  width: 100%;
+  max-width: 500px;
+  background: #fff;
+  padding: 30px 25px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
 }
 
+body.dark .container {
+  background: #1e1e1e;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+/* Heading */
 h1 {
-    margin-bottom: 15px;
-    color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2rem;
 }
 
+/* Input Area */
 .input-area {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
 }
 
-input {
-    flex: 1;
-    padding: 10px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    outline: none;
+.input-area input {
+  flex: 1;
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.3s;
 }
 
-button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 8px;
-    background: #667eea;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
+body.dark .input-area input {
+  border: 1px solid #555;
+  background: #2c2c2c;
+  color: #e0e0e0;
 }
 
-button:hover {
-    background: #764ba2;
+.input-area input:focus {
+  border-color: #ff7f50;
+  box-shadow: 0 0 10px rgba(255,127,80,0.3);
 }
 
-ul {
-    list-style: none;
+.input-area button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #ff7f50;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 1rem;
 }
 
-li {
-    background: #f4f6ff;
-    margin: 8px 0;
-    padding: 10px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: 0.3s;
+.input-area button:hover {
+  background: #ff6333;
 }
 
-li:hover {
-    transform: scale(1.02);
+/* Task List */
+#tasklist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.task-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+#tasklist li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 15px;
+  border-radius: 10px;
+  background: #f0f0f0;
+  transition: all 0.3s;
 }
 
-.task-text {
-    font-size: 15px;
+body.dark #tasklist li {
+  background: #2c2c2c;
 }
 
-.completed .task-text {
-    text-decoration: line-through;
-    color: gray;
-    opacity: 0.6;
+.task-text.completed {
+  text-decoration: line-through;
+  color: #888;
 }
 
-.actions button {
-    margin-left: 5px;
-    padding: 5px 10px;
-    font-size: 12px;
+button.delete-btn {
+  background: #ff4d4d;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
 }
 
-.edit-btn {
-    background: #ffa502;
+button.delete-btn:hover {
+  background: #e60000;
 }
 
-.delete-btn {
-    background: #ff4757;
+button:first-child {
+  background: #4caf50;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
 }
 
-.counter {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-    font-size: 14px;
+button:first-child:hover {
+  background: #339933;
 }
 
-/* Toast notification */
-#toast {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #2ed573;
-    color: white;
-    padding: 12px 18px;
-    border-radius: 10px;
-    opacity: 0;
-    transform: translateY(-20px);
-    transition: 0.4s;
-}
-
-#toast.show {
-    opacity: 1;
-    transform: translateY(0);
+/* Stats */
+.stats {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
 }
