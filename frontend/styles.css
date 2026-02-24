@@ -6,19 +6,86 @@
   font-family: "Segoe UI", sans-serif;
 }
 
-/* Container */
+/* Body Background */
 body {
-  background: #f7f7f7;
+  background: linear-gradient(135deg, #b9641b, #ff7f50);
   color: #333;
   display: flex;
   justify-content: center;
   padding: 50px 20px;
   transition: all 0.3s ease;
+  position: relative;
+  overflow-x: hidden;
 }
 
 body.dark {
-  background: #121212;
+  background: linear-gradient(135deg, #121212, #1e1e1e);
   color: #e0e0e0;
+}
+
+/* Decorative Side Glow */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  width: 300px;
+  height: 100%;
+  z-index: -1;
+  filter: blur(100px);
+  opacity: 0.7;
+  animation: floatGlow 6s ease-in-out infinite alternate;
+}
+
+/* Left Side */
+body::before {
+  left: -100px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 127, 80, 0.9),
+    rgba(255, 99, 71, 0.7),
+    rgba(255, 69, 0, 0.6)
+  );
+}
+
+/* Right Side */
+body::after {
+  right: -100px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 140, 0, 0.9),
+    rgba(255, 99, 71, 0.7),
+    rgba(255, 69, 0, 0.6)
+  );
+}
+
+/* Dark Mode Glow */
+body.dark::before {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 140, 0, 0.4),
+    rgba(255, 99, 71, 0.3),
+    rgba(255, 69, 0, 0.3)
+  );
+}
+
+body.dark::after {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 99, 71, 0.4),
+    rgba(255, 140, 0, 0.3),
+    rgba(255, 69, 0, 0.3)
+  );
+}
+
+/* Glow Animation */
+@keyframes floatGlow {
+  from {
+    transform: translateY(-20px);
+  }
+  to {
+    transform: translateY(20px);
+  }
 }
 
 /* Main Card */
@@ -27,14 +94,14 @@ body.dark {
   max-width: 500px;
   background: #fff;
   padding: 30px 25px;
-  border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
   transition: all 0.3s ease;
 }
 
 body.dark .container {
   background: #1e1e1e;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.6);
 }
 
 /* Heading */
@@ -69,7 +136,7 @@ body.dark .input-area input {
 
 .input-area input:focus {
   border-color: #ff7f50;
-  box-shadow: 0 0 10px rgba(255,127,80,0.3);
+  box-shadow: 0 0 12px rgba(255,127,80,0.4);
 }
 
 .input-area button {
@@ -85,6 +152,7 @@ body.dark .input-area input {
 
 .input-area button:hover {
   background: #ff6333;
+  transform: scale(1.05);
 }
 
 /* Task List */
@@ -100,9 +168,13 @@ body.dark .input-area input {
   align-items: center;
   justify-content: space-between;
   padding: 12px 15px;
-  border-radius: 10px;
+  border-radius: 12px;
   background: #f0f0f0;
   transition: all 0.3s;
+}
+
+#tasklist li:hover {
+  transform: translateX(5px);
 }
 
 body.dark #tasklist li {
@@ -114,6 +186,7 @@ body.dark #tasklist li {
   color: #888;
 }
 
+/* Buttons */
 button.delete-btn {
   background: #ff4d4d;
   color: white;
@@ -124,6 +197,7 @@ button.delete-btn {
 
 button.delete-btn:hover {
   background: #e60000;
+  transform: scale(1.05);
 }
 
 button:first-child {
@@ -135,6 +209,7 @@ button:first-child {
 
 button:first-child:hover {
   background: #339933;
+  transform: scale(1.05);
 }
 
 /* Stats */
