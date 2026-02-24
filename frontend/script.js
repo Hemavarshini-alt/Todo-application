@@ -6,6 +6,7 @@ const totalSpan = document.getElementById("total");
 const completedSpan = document.getElementById("completed");
 const themeToggle = document.getElementById("theme-toggle");
 
+
 // ✅ Add /todolist endpoint
 const API_URL = "https://todo-application-backend-dvt7.onrender.com/todolist";
 
