@@ -2,34 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TODOLIST</title>
+    <title>Todo App</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
+<!-- Shooting Stars Background -->
+<div class="night">
+    <div class="shooting_star"></div>
+    <div class="shooting_star"></div>
+    <div class="shooting_star"></div>
+    <div class="shooting_star"></div>
+    <div class="shooting_star"></div>
+    <div class="shooting_star"></div>
+    <div class="shooting_star"></div>
+    <div class="shooting_star"></div>
+</div>
+
+<!-- Todo Container -->
 <div class="todo-container">
     <div class="header">
-        <div>
-            <h2>My Tasks</h2>
-            <p class="tagline">Stay organized, stay productive</p>
-        </div>
-        <button id="theme-toggle">🌙</button>
+        <h2>My Tasks</h2>
+        <p class="tagline">Stay organized, stay productive</p>
     </div>
 
     <div class="input-area">
-        <input type="text" id="inp" placeholder="Enter a task...">
-        <button id="add-btn">Add</button>
+        <input type="text" placeholder="Enter a task...">
+        <button>Add</button>
     </div>
 
-    <!-- Stats -->
     <div class="stats">
-        <p>Total: <span id="total">0</span></p>
-        <p>Completed: <span id="completed">0</span></p>
+        <p>Total: 0</p>
+        <p>Completed: 0</p>
     </div>
 
-    <ul id="tasklist"></ul>
+    <ul></ul>
 </div>
 
-<script src="script.js"></script>
 </body>
 </html>
