@@ -2,31 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Todo List</title>
+    <title>Todo App</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<div class="container">
-    <h1>My Todo List</h1>
+<!-- Todo Container -->
+<div class="todo-container">
+    <div class="header">
+        <h2>My Tasks</h2>
+        <p class="tagline">Stay organized, stay productive</p>
+    </div>
 
     <div class="input-area">
-        <input type="text" id="taskInput" placeholder="Enter a new task">
-        <button id="addBtn">Add</button>
+        <input type="text" placeholder="Enter a task...">
+        <button>Add</button>
     </div>
 
-    <ul id="taskList"></ul>
-
-    <div class="counter">
-        <span>Total: <b id="total">0</b></span>
-        <span>Completed: <b id="completed">0</b></span>
+    <div class="stats">
+        <p>Total: 0</p>
+        <p>Completed: 0</p>
     </div>
+
+    <ul></ul>
 </div>
-
-<!-- Toast notification -->
-<div id="toast"></div>
-
 <script src="script.js"></script>
 </body>
 </html>
