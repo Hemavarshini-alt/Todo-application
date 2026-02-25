@@ -6,13 +6,47 @@
   font-family: "Segoe UI", sans-serif;
 }
 
-/* BODY */
+/* BODY - DARK BACKGROUND */
 body {
-  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  background: #0f0f1a;
+  color: #262a54;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* LEFT GLOW */
+body::before {
+  content: "";
+  position: absolute;
+  left: -200px;
+  top: 0;
+  width: 400px;
+  height: 100%;
+  background: radial-gradient(circle, rgba(108, 0, 255, 0.6), transparent 70%);
+  filter: blur(120px);
+  animation: glowMove 6s ease-in-out infinite alternate;
+}
+
+/* RIGHT GLOW */
+body::after {
+  content: "";
+  position: absolute;
+  right: -200px;
+  top: 0;
+  width: 400px;
+  height: 100%;
+  background: radial-gradient(circle, rgba(0, 200, 255, 0.6), transparent 70%);
+  filter: blur(120px);
+  animation: glowMove 6s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes glowMove {
+  from { transform: translateY(-50px); }
+  to { transform: translateY(50px); }
 }
 
 /* MAIN CONTAINER */
@@ -21,16 +55,27 @@ body {
   max-width: 500px;
   padding: 30px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(15px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-  color: #fff;
+  background: rgba(20, 20, 35, 0.9);
+  backdrop-filter: blur(20px);
+  box-shadow: 
+    0 0 30px rgba(108, 0, 255, 0.3),
+    0 0 60px rgba(0, 200, 255, 0.2);
+  color: #080936;
+  position: relative;
+  z-index: 1;
+  transition: 0.4s ease;
 }
 
-/* HEADING */
+/* HEADING - GLOW TEXT */
 h1 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  font-size: 26px;
+  background: linear-gradient(90deg, #6c63ff, #00c6ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  letter-spacing: 1px;
 }
 
 /* INPUT AREA */
@@ -44,9 +89,17 @@ h1 {
   flex: 1;
   padding: 12px;
   border-radius: 10px;
-  border: none;
+  border: 1px solid #333;
   outline: none;
   font-size: 16px;
+  background: #ebebed;
+  color: rgb(39, 47, 140);
+  transition: 0.3s;
+}
+
+.input-area input:focus {
+  border-color: #6c63ff;
+  box-shadow: 0 0 10px #6c63ff;
 }
 
 /* ADD BUTTON */
@@ -56,13 +109,14 @@ h1 {
   border: none;
   cursor: pointer;
   font-weight: bold;
-  background: linear-gradient(135deg, #ff512f, #dd2476);
+  background: linear-gradient(135deg, #6c63ff, #9d4edd);
   color: white;
   transition: 0.3s;
 }
 
 .input-area button:hover {
   transform: scale(1.05);
+  box-shadow: 0 0 15px #9d4edd;
 }
 
 /* TASK LIST */
@@ -71,7 +125,7 @@ ul {
 }
 
 li {
-  background: rgba(255, 255, 255, 0.2);
+  background: #1c1c2b;
   padding: 12px 15px;
   border-radius: 12px;
   margin-bottom: 12px;
@@ -79,16 +133,28 @@ li {
   justify-content: space-between;
   align-items: center;
   transition: 0.3s;
+  border: 1px solid #2a2a40;
 }
 
 li:hover {
   transform: translateX(5px);
+  box-shadow: 0 0 15px rgba(108, 0, 255, 0.4);
+}
+
+/* TASK TEXT */
+li span {
+  flex: 1;
+  margin-left: 10px;
+  color: #f1f1f1;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
 /* COMPLETED TEXT */
 .completed {
   text-decoration: line-through;
   opacity: 0.6;
+  color: #9ca3af;
 }
 
 /* BUTTON GROUP */
@@ -97,9 +163,9 @@ li:hover {
   gap: 8px;
 }
 
-/* ✅ BLUE TICK BUTTON */
+/* COMPLETE BUTTON */
 .complete-btn {
-  background: linear-gradient(135deg, #2193b0, #6dd5ed);
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
   color: white;
   border: none;
   padding: 6px 12px;
@@ -111,12 +177,29 @@ li:hover {
 
 .complete-btn:hover {
   transform: scale(1.15);
-  box-shadow: 0 5px 15px rgba(0, 140, 255, 0.5);
+  box-shadow: 0 0 12px #00c6ff;
 }
 
-/* ✅ RED DELETE BUTTON */
+/* EDIT BUTTON */
+.edit-btn {
+  background: linear-gradient(135deg, #f7971e, #ffd200);
+  color: #000;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.edit-btn:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 12px #ffd200;
+}
+
+/* DELETE BUTTON */
 .delete-btn {
-  background: linear-gradient(135deg, #ff0000, #b31217);
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
   color: white;
   border: none;
   padding: 6px 12px;
@@ -128,7 +211,7 @@ li:hover {
 
 .delete-btn:hover {
   transform: scale(1.15);
-  box-shadow: 0 5px 15px rgba(255, 0, 0, 0.6);
+  box-shadow: 0 0 12px #ff416c;
 }
 
 /* STATS */
@@ -136,5 +219,29 @@ li:hover {
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
-  font-weight: bold;
+  font-weight: 600;
+  color: #e5e7eb;
+  font-size: 14px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* QUOTE SECTION */
+.quote {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(108, 0, 255, 0.15), rgba(0, 200, 255, 0.15));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-style: italic;
+  font-size: 14px;
+  text-align: center;
+  color: #e0e0ff;
+  box-shadow: 0 0 15px rgba(108, 0, 255, 0.2);
+  animation: fadeIn 1.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

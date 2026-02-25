@@ -2,27 +2,48 @@ import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
+  const [showTodo, setShowTodo] = useState(false);
   const [task, setTask] = useState("");
   const [list, setList] = useState([]);
-  const [dark, setDark] = useState(false);
+  const [editId, setEditId] = useState(null);
+  const [editText, setEditText] = useState("");
+  const [quote, setQuote] = useState("");
 
   const API_URL =
     "https://todo-application-backend-dvt7.onrender.com/todolist";
 
-  // Fetch tasks
+  // 🌟 Motivational Quotes
+  const quotes = [
+    "Small steps every day lead to big success.",
+    "Discipline is choosing what you want most.",
+    "Your future is created by what you do today.",
+    "Dream big. Start small. Act now.",
+    "Stay focused and never give up.",
+    "Progress, not perfection.",
+    "Consistency beats motivation."
+  ];
+
+  // Pick Random Quote
+  const getRandomQuote = () => {
+    const random = Math.floor(Math.random() * quotes.length);
+    setQuote(quotes[random]);
+  };
+
+  // Fetch tasks when entering app
   useEffect(() => {
-    fetch(API_URL)
-      .then((res) => res.json())
-      .then((data) => setList(data))
-      .catch((err) => console.log(err));
-  }, []);
+    if (showTodo) {
+      getRandomQuote();
+
+      fetch(API_URL)
+        .then((res) => res.json())
+        .then((data) => setList(data))
+        .catch((err) => console.log(err));
+    }
+  }, [showTodo]);
 
   // Add Task
   const addTask = () => {
-    if (task.trim() === "") {
-      alert("Please enter a task");
-      return;
-    }
+    if (task.trim() === "") return;
 
     fetch(API_URL, {
       method: "POST",
@@ -45,72 +66,132 @@ function App() {
     })
       .then((res) => res.json())
       .then((updatedTask) => {
-        const updatedList = list.map((item) =>
-          item._id === id ? updatedTask : item
+        setList(
+          list.map((item) =>
+            item._id === id ? updatedTask : item
+          )
         );
-        setList(updatedList);
       });
   };
 
   // Delete Task
   const deleteTask = (id) => {
+    fetch(`${API_URL}/${id}`, { method: "DELETE" })
+      .then(() => {
+        setList(list.filter((item) => item._id !== id));
+      });
+  };
+
+  // Start Edit
+  const startEdit = (id, text) => {
+    setEditId(id);
+    setEditText(text);
+  };
+
+  // Save Edit
+  const saveEdit = (id) => {
+    if (editText.trim() === "") return;
+
     fetch(`${API_URL}/${id}`, {
-      method: "DELETE",
-    }).then(() => {
-      const newList = list.filter((item) => item._id !== id);
-      setList(newList);
-    });
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userTask: editText }),
+    })
+      .then((res) => res.json())
+      .then((updatedTask) => {
+        setList(
+          list.map((item) =>
+            item._id === id ? updatedTask : item
+          )
+        );
+        setEditId(null);
+        setEditText("");
+      });
   };
 
   const totalTasks = list.length;
   const completedTasks = list.filter((item) => item.status).length;
 
+  // ================= WELCOME SCREEN =================
+  if (!showTodo) {
+    return (
+      <div className="welcome">
+        <h1 className="jello">Welcome to TODOLIST</h1>
+        <p className="quote">"Read • Learn • Smile"</p>
+        <button className="start-btn" onClick={() => setShowTodo(true)}>
+          Enter To-Do App
+        </button>
+      </div>
+    );
+  }
+
+  // ================= TODO APP =================
   return (
-    <div className={`container ${dark ? "dark" : ""}`}>
+    <div className="container">
       <h1>📝 My To-Do List</h1>
+
+      {/* 🌟 Random Quote Section */}
+      <p className="daily-quote">"{quote}"</p>
 
       <div className="input-area">
         <input
           type="text"
-          placeholder="Add a new task..."
+          placeholder="Add new task..."
           value={task}
           onChange={(e) => setTask(e.target.value)}
         />
-
         <button onClick={addTask}>Add</button>
-
-        <button onClick={() => setDark(!dark)}>
-          {dark ? "☀️" : "🌙"}
-        </button>
       </div>
 
       <ul>
         {list.map((item) => (
           <li key={item._id}>
-            
-            {/* ✅ BLUE TICK BUTTON */}
             <button
-              className={`complete-btn ${
-                item.status ? "marked" : ""
-              }`}
+              className={`complete-btn ${item.status ? "marked" : ""}`}
               onClick={() => complete(item._id, item.status)}
             >
               ✔
             </button>
 
-            {/* TASK TEXT */}
-            <span className={item.status ? "completed" : ""}>
-              {item.userTask}
-            </span>
+            {editId === item._id ? (
+              <>
+                <input
+                  className="edit-input"
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                />
+                <button
+                  className="save-btn"
+                  onClick={() => saveEdit(item._id)}
+                >
+                  Save
+                </button>
+              </>
+            ) : (
+              <>
+                <span className={item.status ? "completed" : ""}>
+                  {item.userTask}
+                </span>
 
-            {/* ✅ RED DELETE BUTTON */}
-            <button
-              className="delete-btn"
-              onClick={() => deleteTask(item._id)}
-            >
-              Delete
-            </button>
+                <div className="btn-group">
+                  <button
+                    className="edit-btn"
+                    onClick={() =>
+                      startEdit(item._id, item.userTask)
+                    }
+                  >
+                    Edit
+                  </button>
 
+                  <button
+                    className="delete-btn"
+                    onClick={() => deleteTask(item._id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </>
+            )}
           </li>
         ))}
       </ul>

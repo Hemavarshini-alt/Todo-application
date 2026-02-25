@@ -6,11 +6,12 @@ const totalSpan = document.getElementById("total");
 const completedSpan = document.getElementById("completed");
 const themeToggle = document.getElementById("theme-toggle");
 
-
-//Add /todolist endpoint
+// Backend API
 const API_URL = "https://todo-application-backend-dvt7.onrender.com/todolist";
 
-// function to update stats
+// --------------------
+// Update Stats
+// --------------------
 function updateStats() {
   const tasks = task_list.querySelectorAll("li");
   const completedTasks = task_list.querySelectorAll(".completed");
@@ -19,7 +20,9 @@ function updateStats() {
   completedSpan.textContent = completedTasks.length;
 }
 
-// load tasks
+// --------------------
+// Load Tasks
+// --------------------
 window.addEventListener("DOMContentLoaded", function () {
   fetch(API_URL)
     .then((res) => res.json())
@@ -31,7 +34,9 @@ window.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// add task
+// --------------------
+// Add Task
+// --------------------
 add_btn.addEventListener("click", function () {
   const input_task = task_input.value.trim();
 
@@ -53,6 +58,9 @@ add_btn.addEventListener("click", function () {
     });
 });
 
+// --------------------
+// Create Task Item
+// --------------------
 function create_task_list(task_id, task_text_db, task_status) {
   const list_item = document.createElement("li");
 
@@ -63,6 +71,10 @@ function create_task_list(task_id, task_text_db, task_status) {
   task_text.className = "task-text";
   task_text.textContent = task_text_db;
 
+  const edit_btn = document.createElement("button");
+  edit_btn.textContent = "Edit";
+  edit_btn.className = "edit-btn";
+
   const delete_btn = document.createElement("button");
   delete_btn.className = "delete-btn";
   delete_btn.textContent = "Delete";
@@ -71,7 +83,9 @@ function create_task_list(task_id, task_text_db, task_status) {
     task_text.classList.add("completed");
   }
 
-  // complete task
+  // --------------------
+  // Complete Task
+  // --------------------
   complete_btn.addEventListener("click", function () {
     let finished = task_text.classList.contains("completed");
 
@@ -85,7 +99,30 @@ function create_task_list(task_id, task_text_db, task_status) {
     });
   });
 
-  // delete task
+  // --------------------
+  // Edit Task  ✅ FIXED
+  // --------------------
+  edit_btn.addEventListener("click", function () {
+    const updatedText = prompt("Edit your task:", task_text.textContent);
+
+    if (updatedText === null) return; // cancel pressed
+    if (updatedText.trim() === "") {
+      alert("Task cannot be empty!");
+      return;
+    }
+
+    fetch(`${API_URL}/${task_id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userTask: updatedText.trim() }),
+    }).then(() => {
+      task_text.textContent = updatedText.trim();
+    });
+  });
+
+  // --------------------
+  // Delete Task
+  // --------------------
   delete_btn.addEventListener("click", function () {
     fetch(`${API_URL}/${task_id}`, {
       method: "DELETE",
@@ -95,16 +132,21 @@ function create_task_list(task_id, task_text_db, task_status) {
     });
   });
 
+  // Append Elements
   list_item.appendChild(complete_btn);
   list_item.appendChild(task_text);
+  list_item.appendChild(edit_btn);
   list_item.appendChild(delete_btn);
 
   task_list.appendChild(list_item);
 }
 
-/* Theme Toggle */
+// --------------------
+// Theme Toggle
+// --------------------
 themeToggle.addEventListener("click", function () {
   document.body.classList.toggle("dark");
 
-  themeToggle.textContent = document.body.classList.contains("dark") ? "☀" : "🌙";
+  themeToggle.textContent =
+    document.body.classList.contains("dark") ? "☀" : "🌙";
 });
