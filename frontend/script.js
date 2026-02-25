@@ -141,6 +141,7 @@ function create_task_list(task_id, task_text_db, task_status) {
   task_list.appendChild(list_item);
 }
 
+
 // --------------------
 // Theme Toggle
 // --------------------
