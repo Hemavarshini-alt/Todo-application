@@ -10,7 +10,7 @@ function App() {
   const API_URL =
     "https://todo-application-backend-dvt7.onrender.com/todolist";
 
-  // 🌟 Motivational Quotes
+  // 🌟 Large Motivational Quotes Collection
   const quotes = [
     "Small steps every day lead to big success.",
     "Discipline is choosing what you want most.",
@@ -18,11 +18,24 @@ function App() {
     "Dream big. Start small. Act now.",
     "Stay focused and never give up.",
     "Progress, not perfection.",
-    "Consistency beats motivation."
+    "Consistency beats motivation.",
+    "Success starts with self-belief.",
+    "Hard work beats talent when talent doesn't work hard.",
+    "Focus on goals, not obstacles.",
+    "You are capable of amazing things.",
+    "Make today count.",
+    "Don't stop until you're proud.",
+    "Action is the key to success.",
+    "Push yourself, because no one else will."
   ];
 
+  // 🎯 Get Random Quote (No Repeat)
   const getRandomQuote = () => {
-    const random = Math.floor(Math.random() * quotes.length);
+    let random;
+    do {
+      random = Math.floor(Math.random() * quotes.length);
+    } while (quotes[random] === quote);
+
     setQuote(quotes[random]);
   };
 
@@ -30,6 +43,13 @@ function App() {
     if (showTodo) {
       fetchTasks();
       getRandomQuote();
+
+      // ⏳ Auto change quote every 10 seconds
+      const interval = setInterval(() => {
+        getRandomQuote();
+      }, 10000);
+
+      return () => clearInterval(interval);
     }
   }, [showTodo]);
 
@@ -57,6 +77,7 @@ function App() {
       const newTask = await res.json();
       setList((prev) => [...prev, newTask]);
       setTask("");
+      getRandomQuote(); // ✨ change quote when task added
     } catch (err) {
       console.log("Add error:", err);
     }
@@ -78,12 +99,13 @@ function App() {
           item._id === id ? updatedTask : item
         )
       );
+
+      getRandomQuote(); // ✨ change quote when task completed
     } catch (err) {
       console.log("Complete error:", err);
     }
   };
 
-  // ---------------- DELETE TASK ----------------
   const deleteTask = async (id) => {
     try {
       await fetch(`${API_URL}/${id}`, { method: "DELETE" });
@@ -99,20 +121,18 @@ function App() {
   const totalTasks = list.length;
   const completedTasks = list.filter((item) => item.status).length;
 
-  // ================= WELCOME SCREEN =================
   if (!showTodo) {
     return (
       <div className="welcome">
         <h1 className="jello">Welcome to TODOLIST</h1>
         <p className="quote">"Read • Learn • Smile"</p>
         <button className="start-btn" onClick={() => setShowTodo(true)}>
-          Enter To-Do App
+          Enter To-Do App.......
         </button>
       </div>
     );
   }
 
-  // ================= TODO APP =================
   return (
     <div className="container">
       <h1>📝 My To-Do List</h1>

@@ -60,13 +60,13 @@ body::after {
   box-shadow: 
     0 0 30px rgba(108, 0, 255, 0.3),
     0 0 60px rgba(0, 200, 255, 0.2);
-  color: #080936;
+  color: #ffffff;
   position: relative;
   z-index: 1;
   transition: 0.4s ease;
 }
 
-/* HEADING - GLOW TEXT */
+/* HEADING */
 h1 {
   text-align: center;
   margin-bottom: 25px;
@@ -76,6 +76,52 @@ h1 {
   -webkit-text-fill-color: transparent;
   font-weight: bold;
   letter-spacing: 1px;
+}
+
+/* ================= UPDATED QUOTE SECTION ================= */
+
+.daily-quote {
+  margin-bottom: 20px;
+  padding: 18px;
+  border-radius: 15px;
+  position: relative;
+  text-align: center;
+  font-style: italic;
+  font-size: 15px;
+  color: #e0e0ff;
+  background: rgba(108, 0, 255, 0.1);
+  border: 1px solid rgba(108, 0, 255, 0.4);
+  box-shadow: 0 0 25px rgba(108, 0, 255, 0.4);
+  animation: quoteFade 1s ease, glowPulse 3s infinite alternate;
+  overflow: hidden;
+}
+
+/* Animated gradient border */
+.daily-quote::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 15px;
+  background: linear-gradient(45deg, #6c63ff, #00c6ff, #9d4edd);
+  z-index: -1;
+  filter: blur(15px);
+  opacity: 0.6;
+  animation: borderRotate 6s linear infinite;
+}
+
+@keyframes borderRotate {
+  0% { filter: hue-rotate(0deg) blur(15px); }
+  100% { filter: hue-rotate(360deg) blur(15px); }
+}
+
+@keyframes quoteFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glowPulse {
+  from { box-shadow: 0 0 20px rgba(108, 0, 255, 0.4); }
+  to { box-shadow: 0 0 35px rgba(0, 200, 255, 0.6); }
 }
 
 /* INPUT AREA */
@@ -141,7 +187,6 @@ li:hover {
   box-shadow: 0 0 15px rgba(108, 0, 255, 0.4);
 }
 
-/* TASK TEXT */
 li span {
   flex: 1;
   margin-left: 10px;
@@ -150,68 +195,32 @@ li span {
   letter-spacing: 0.5px;
 }
 
-/* COMPLETED TEXT */
 .completed {
   text-decoration: line-through;
   opacity: 0.6;
   color: #9ca3af;
 }
 
-/* BUTTON GROUP */
-.btn-group {
-  display: flex;
-  gap: 8px;
+/* BUTTONS */
+.complete-btn,
+.edit-btn,
+.delete-btn {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
 }
 
-/* COMPLETE BUTTON */
 .complete-btn {
   background: linear-gradient(135deg, #00c6ff, #0072ff);
   color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
 }
 
-.complete-btn:hover {
-  transform: scale(1.15);
-  box-shadow: 0 0 12px #00c6ff;
-}
-
-/* EDIT BUTTON */
-.edit-btn {
-  background: linear-gradient(135deg, #f7971e, #ffd200);
-  color: #000;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
-}
-
-.edit-btn:hover {
-  transform: scale(1.15);
-  box-shadow: 0 0 12px #ffd200;
-}
-
-/* DELETE BUTTON */
 .delete-btn {
   background: linear-gradient(135deg, #ff416c, #ff4b2b);
   color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
-}
-
-.delete-btn:hover {
-  transform: scale(1.15);
-  box-shadow: 0 0 12px #ff416c;
 }
 
 /* STATS */
@@ -224,24 +233,4 @@ li span {
   font-size: 14px;
   padding-top: 10px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* QUOTE SECTION */
-.quote {
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(108, 0, 255, 0.15), rgba(0, 200, 255, 0.15));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  font-style: italic;
-  font-size: 14px;
-  text-align: center;
-  color: #e0e0ff;
-  box-shadow: 0 0 15px rgba(108, 0, 255, 0.2);
-  animation: fadeIn 1.5s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
 }
