@@ -6,7 +6,6 @@ const totalSpan = document.getElementById("total");
 const completedSpan = document.getElementById("completed");
 const themeToggle = document.getElementById("theme-toggle");
 
-// Backend API
 const API_URL = "https://todo-application-backend-dvt7.onrender.com/todolist";
 
 // --------------------
@@ -14,7 +13,7 @@ const API_URL = "https://todo-application-backend-dvt7.onrender.com/todolist";
 // --------------------
 function updateStats() {
   const tasks = task_list.querySelectorAll("li");
-  const completedTasks = task_list.querySelectorAll(".completed");
+  const completedTasks = task_list.querySelectorAll(".task-text.completed");
 
   totalSpan.textContent = tasks.length;
   completedSpan.textContent = completedTasks.length;
@@ -23,39 +22,47 @@ function updateStats() {
 // --------------------
 // Load Tasks
 // --------------------
-window.addEventListener("DOMContentLoaded", function () {
-  fetch(API_URL)
-    .then((res) => res.json())
-    .then((tasks) => {
-      tasks.forEach((task) => {
-        create_task_list(task._id, task.userTask, task.status);
-      });
-      updateStats();
+window.addEventListener("DOMContentLoaded", async function () {
+  try {
+    const res = await fetch(API_URL);
+    const tasks = await res.json();
+
+    tasks.forEach((task) => {
+      create_task_list(task._id, task.userTask, task.status);
     });
+
+    updateStats();
+  } catch (error) {
+    console.error("Error loading tasks:", error);
+  }
 });
 
 // --------------------
 // Add Task
 // --------------------
-add_btn.addEventListener("click", function () {
+add_btn.addEventListener("click", async function () {
   const input_task = task_input.value.trim();
 
-  if (input_task === "") {
+  if (!input_task) {
     alert("Please enter a task!");
     return;
   }
 
-  fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ userTask: input_task }),
-  })
-    .then((res) => res.json())
-    .then((newtask) => {
-      create_task_list(newtask._id, newtask.userTask, newtask.status);
-      task_input.value = "";
-      updateStats();
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userTask: input_task }),
     });
+
+    const newtask = await res.json();
+
+    create_task_list(newtask._id, newtask.userTask, newtask.status);
+    task_input.value = "";
+    updateStats();
+  } catch (error) {
+    console.error("Error adding task:", error);
+  }
 });
 
 // --------------------
@@ -76,8 +83,8 @@ function create_task_list(task_id, task_text_db, task_status) {
   edit_btn.className = "edit-btn";
 
   const delete_btn = document.createElement("button");
-  delete_btn.className = "delete-btn";
   delete_btn.textContent = "Delete";
+  delete_btn.className = "delete-btn";
 
   if (task_status) {
     task_text.classList.add("completed");
@@ -86,53 +93,77 @@ function create_task_list(task_id, task_text_db, task_status) {
   // --------------------
   // Complete Task
   // --------------------
-  complete_btn.addEventListener("click", function () {
-    let finished = task_text.classList.contains("completed");
+  complete_btn.addEventListener("click", async function () {
+    const finished = task_text.classList.contains("completed");
 
-    fetch(`${API_URL}/${task_id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: !finished }),
-    }).then(() => {
+    try {
+      const res = await fetch(`${API_URL}/${task_id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: !finished }),
+      });
+
+      if (!res.ok) throw new Error("Update failed");
+
       task_text.classList.toggle("completed");
       updateStats();
-    });
+    } catch (error) {
+      console.error("Complete update error:", error);
+    }
   });
 
   // --------------------
-  // Edit Task  ✅ FIXED
+  // ✅ EDIT TASK (PROPER FIX)
   // --------------------
-  edit_btn.addEventListener("click", function () {
+  edit_btn.addEventListener("click", async function () {
     const updatedText = prompt("Edit your task:", task_text.textContent);
 
-    if (updatedText === null) return; // cancel pressed
-    if (updatedText.trim() === "") {
+    if (updatedText === null) return;
+
+    const trimmedText = updatedText.trim();
+
+    if (!trimmedText) {
       alert("Task cannot be empty!");
       return;
     }
 
-    fetch(`${API_URL}/${task_id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userTask: updatedText.trim() }),
-    }).then(() => {
-      task_text.textContent = updatedText.trim();
-    });
+    try {
+      const res = await fetch(`${API_URL}/${task_id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userTask: trimmedText }),
+      });
+
+      if (!res.ok) throw new Error("Edit failed");
+
+      const updatedTask = await res.json();
+
+      // Update UI with backend response
+      task_text.textContent = updatedTask.userTask;
+    } catch (error) {
+      console.error("Edit error:", error);
+      alert("Edit failed! Check backend.");
+    }
   });
 
   // --------------------
   // Delete Task
   // --------------------
-  delete_btn.addEventListener("click", function () {
-    fetch(`${API_URL}/${task_id}`, {
-      method: "DELETE",
-    }).then(() => {
-      task_list.removeChild(list_item);
+  delete_btn.addEventListener("click", async function () {
+    try {
+      const res = await fetch(`${API_URL}/${task_id}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) throw new Error("Delete failed");
+
+      list_item.remove();
       updateStats();
-    });
+    } catch (error) {
+      console.error("Delete error:", error);
+    }
   });
 
-  // Append Elements
   list_item.appendChild(complete_btn);
   list_item.appendChild(task_text);
   list_item.appendChild(edit_btn);
@@ -141,13 +172,11 @@ function create_task_list(task_id, task_text_db, task_status) {
   task_list.appendChild(list_item);
 }
 
-
 // --------------------
 // Theme Toggle
 // --------------------
 themeToggle.addEventListener("click", function () {
   document.body.classList.toggle("dark");
-
   themeToggle.textContent =
     document.body.classList.contains("dark") ? "☀" : "🌙";
 });

@@ -5,8 +5,6 @@ function App() {
   const [showTodo, setShowTodo] = useState(false);
   const [task, setTask] = useState("");
   const [list, setList] = useState([]);
-  const [editId, setEditId] = useState(null);
-  const [editText, setEditText] = useState("");
   const [quote, setQuote] = useState("");
 
   const API_URL =
@@ -23,90 +21,79 @@ function App() {
     "Consistency beats motivation."
   ];
 
-  // Pick Random Quote
   const getRandomQuote = () => {
     const random = Math.floor(Math.random() * quotes.length);
     setQuote(quotes[random]);
   };
 
-  // Fetch tasks when entering app
   useEffect(() => {
     if (showTodo) {
+      fetchTasks();
       getRandomQuote();
-
-      fetch(API_URL)
-        .then((res) => res.json())
-        .then((data) => setList(data))
-        .catch((err) => console.log(err));
     }
   }, [showTodo]);
 
-  // Add Task
-  const addTask = () => {
-    if (task.trim() === "") return;
-
-    fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userTask: task }),
-    })
-      .then((res) => res.json())
-      .then((newTask) => {
-        setList([...list, newTask]);
-        setTask("");
-      });
+  const fetchTasks = async () => {
+    try {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      setList(data);
+    } catch (err) {
+      console.log("Fetch error:", err);
+    }
   };
 
-  // Complete Task
-  const complete = (id, status) => {
-    fetch(`${API_URL}/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: !status }),
-    })
-      .then((res) => res.json())
-      .then((updatedTask) => {
-        setList(
-          list.map((item) =>
-            item._id === id ? updatedTask : item
-          )
-        );
+  // ---------------- ADD TASK ----------------
+  const addTask = async () => {
+    if (!task.trim()) return;
+
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userTask: task.trim() }),
       });
+
+      const newTask = await res.json();
+      setList((prev) => [...prev, newTask]);
+      setTask("");
+    } catch (err) {
+      console.log("Add error:", err);
+    }
   };
 
-  // Delete Task
-  const deleteTask = (id) => {
-    fetch(`${API_URL}/${id}`, { method: "DELETE" })
-      .then(() => {
-        setList(list.filter((item) => item._id !== id));
+  // ---------------- COMPLETE TASK ----------------
+  const complete = async (id, status) => {
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: !status }),
       });
+
+      const updatedTask = await res.json();
+
+      setList((prev) =>
+        prev.map((item) =>
+          item._id === id ? updatedTask : item
+        )
+      );
+    } catch (err) {
+      console.log("Complete error:", err);
+    }
   };
 
-  // Start Edit
-  const startEdit = (id, text) => {
-    setEditId(id);
-    setEditText(text);
-  };
+  // ---------------- DELETE TASK ----------------
+  const deleteTask = async (id) => {
+    try {
+      await fetch(`${API_URL}/${id}`, { method: "DELETE" });
 
-  // Save Edit
-  const saveEdit = (id) => {
-    if (editText.trim() === "") return;
-
-    fetch(`${API_URL}/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userTask: editText }),
-    })
-      .then((res) => res.json())
-      .then((updatedTask) => {
-        setList(
-          list.map((item) =>
-            item._id === id ? updatedTask : item
-          )
-        );
-        setEditId(null);
-        setEditText("");
-      });
+      setList((prev) =>
+        prev.filter((item) => item._id !== id)
+      );
+    } catch (err) {
+      console.log("Delete error:", err);
+    }
   };
 
   const totalTasks = list.length;
@@ -130,7 +117,6 @@ function App() {
     <div className="container">
       <h1>📝 My To-Do List</h1>
 
-      {/* 🌟 Random Quote Section */}
       <p className="daily-quote">"{quote}"</p>
 
       <div className="input-area">
@@ -139,6 +125,7 @@ function App() {
           placeholder="Add new task..."
           value={task}
           onChange={(e) => setTask(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && addTask()}
         />
         <button onClick={addTask}>Add</button>
       </div>
@@ -153,45 +140,16 @@ function App() {
               ✔
             </button>
 
-            {editId === item._id ? (
-              <>
-                <input
-                  className="edit-input"
-                  value={editText}
-                  onChange={(e) => setEditText(e.target.value)}
-                />
-                <button
-                  className="save-btn"
-                  onClick={() => saveEdit(item._id)}
-                >
-                  Save
-                </button>
-              </>
-            ) : (
-              <>
-                <span className={item.status ? "completed" : ""}>
-                  {item.userTask}
-                </span>
+            <span className={item.status ? "completed" : ""}>
+              {item.userTask}
+            </span>
 
-                <div className="btn-group">
-                  <button
-                    className="edit-btn"
-                    onClick={() =>
-                      startEdit(item._id, item.userTask)
-                    }
-                  >
-                    Edit
-                  </button>
-
-                  <button
-                    className="delete-btn"
-                    onClick={() => deleteTask(item._id)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </>
-            )}
+            <button
+              className="delete-btn"
+              onClick={() => deleteTask(item._id)}
+            >
+              Delete
+            </button>
           </li>
         ))}
       </ul>
