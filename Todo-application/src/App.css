@@ -1,42 +1,140 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* BODY */
+body {
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* MAIN CONTAINER */
+.container {
+  width: 100%;
+  max-width: 500px;
+  padding: 30px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  color: #fff;
+}
+
+/* HEADING */
+h1 {
   text-align: center;
+  margin-bottom: 20px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* INPUT AREA */
+.input-area {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.input-area input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 16px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* ADD BUTTON */
+.input-area button {
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  background: linear-gradient(135deg, #ff512f, #dd2476);
+  color: white;
+  transition: 0.3s;
 }
 
-.card {
-  padding: 2em;
+.input-area button:hover {
+  transform: scale(1.05);
 }
 
-.read-the-docs {
-  color: #888;
+/* TASK LIST */
+ul {
+  list-style: none;
+}
+
+li {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 12px 15px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.3s;
+}
+
+li:hover {
+  transform: translateX(5px);
+}
+
+/* COMPLETED TEXT */
+.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* BUTTON GROUP */
+.btn-group {
+  display: flex;
+  gap: 8px;
+}
+
+/* ✅ BLUE TICK BUTTON */
+.complete-btn {
+  background: linear-gradient(135deg, #2193b0, #6dd5ed);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.complete-btn:hover {
+  transform: scale(1.15);
+  box-shadow: 0 5px 15px rgba(0, 140, 255, 0.5);
+}
+
+/* ✅ RED DELETE BUTTON */
+.delete-btn {
+  background: linear-gradient(135deg, #ff0000, #b31217);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.delete-btn:hover {
+  transform: scale(1.15);
+  box-shadow: 0 5px 15px rgba(255, 0, 0, 0.6);
+}
+
+/* STATS */
+.stats {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
 }
